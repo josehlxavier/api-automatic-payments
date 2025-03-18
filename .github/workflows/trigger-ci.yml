@@ -25,9 +25,15 @@ jobs:
       - name: Capturar Informações do PR
         run: |
           echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
-          echo "PR_DESCRIPTION=${{ github.event.pull_request.body }}" >> $GITHUB_ENV
           echo "PR_URL=${{ github.event.pull_request.html_url }}" >> $GITHUB_ENV
           echo "PR_AUTHOR=${{ github.event.pull_request.user.login }}" >> $GITHUB_ENV
+
+          # Adicionando suporte a multiline para PR_DESCRIPTION
+          {
+            echo 'PR_DESCRIPTION<<EOF'
+            echo "${{ github.event.pull_request.body }}"
+            echo 'EOF'
+          } >> $GITHUB_ENV
 
       - name: Exibir Variáveis do PR (Debug)
         run: |
