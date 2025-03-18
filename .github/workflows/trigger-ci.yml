@@ -46,6 +46,8 @@ jobs:
 
       - name: Acionar workflow no `repo-ci-cd`
         run: |
+          PR_DESCRIPTION_ESCAPED=$(echo "${{ env.PR_DESCRIPTION }}" | jq -Rs .)
+
           curl -X POST -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.REPO_ACCESS_TOKEN }}" \
             https://api.github.com/repos/OpenBanking-Brasil/CI-CD-OFB/actions/workflows/pr-validation-and-jira.yml/dispatches \
@@ -55,7 +57,7 @@ jobs:
                 \"SWAGGER_FILE_URL\": \"${{ env.SWAGGER_NEW_URL }}\",
                 \"OLD_SWAGGER_FILE_URL\": \"${{ env.OLD_SWAGGER_FILE_URL }}\",
                 \"PR_TITLE\": \"${{ env.PR_TITLE }}\",
-                \"PR_DESCRIPTION\": \"${{ env.PR_DESCRIPTION }}\",
+                \"PR_DESCRIPTION\": $PR_DESCRIPTION_ESCAPED,
                 \"PR_URL\": \"${{ env.PR_URL }}\",
                 \"PR_AUTHOR\": \"${{ env.PR_AUTHOR }}\"
               }
