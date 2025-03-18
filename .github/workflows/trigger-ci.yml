@@ -25,6 +25,7 @@ jobs:
       - name: Capturar Informações do PR
         run: |
           echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+          echo "PR_DESCRIPTION=${{ github.event.pull_request.body }}" >> $GITHUB_ENV
           echo "PR_URL=${{ github.event.pull_request.html_url }}" >> $GITHUB_ENV
           echo "PR_AUTHOR=${{ github.event.pull_request.user.login }}" >> $GITHUB_ENV
 
@@ -33,6 +34,7 @@ jobs:
           echo "Swagger YAML (novo): ${{ env.SWAGGER_NEW_URL }}"
           echo "Swagger YAML (antigo): ${{ env.OLD_SWAGGER_FILE_URL }}"
           echo "Título do PR: ${{ env.PR_TITLE }}"
+          echo "Descrição do PR: ${{ env.PR_DESCRIPTION }}"
           echo "URL do PR: ${{ env.PR_URL }}"
           echo "Autor do PR: ${{ env.PR_AUTHOR }}"
 
@@ -47,6 +49,7 @@ jobs:
                 \"SWAGGER_FILE_URL\": \"${{ env.SWAGGER_NEW_URL }}\",
                 \"OLD_SWAGGER_FILE_URL\": \"${{ env.OLD_SWAGGER_FILE_URL }}\",
                 \"PR_TITLE\": \"${{ env.PR_TITLE }}\",
+                \"PR_DESCRIPTION\": \"${{ env.PR_DESCRIPTION }}\",
                 \"PR_URL\": \"${{ env.PR_URL }}\",
                 \"PR_AUTHOR\": \"${{ env.PR_AUTHOR }}\"
               }
