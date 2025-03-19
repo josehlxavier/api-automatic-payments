@@ -386,7 +386,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateRecurringPixPayment'
         description: Payload para criação da iniciação do pagamento Pix.
-        required: true
+        required: false
       responses:
         '201':
           $ref: '#/components/responses/201RecurringPaymentsIdPost'
@@ -549,7 +549,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchPixPayment'
         description: Atualização do Pagamento Recorrente.
-        required: true
+        required: false
       responses:
         '200':
           $ref: '#/components/responses/200RecurringPaymentsIdPatch'
@@ -902,7 +902,7 @@ components:
             identification:
               type: string
               maxLength: 14
-              description: Número do documento de identificação oficial do titular pessoa jurídica.
+              description: Números dos documentos de identificação oficial do titular pessoa jurídica.
               example: '11111111111111'
               pattern: '^\d{14}$'
             rel:
@@ -918,7 +918,7 @@ components:
       properties:
         data:
           type: object
-          description: Objeto contendo as informações de consentimento para a iniciação de pagamento individual.
+          description: Objetos contendo as informações de consentimento para a iniciação de pagamento individuais.
           required:
             - loggedUser
             - creditors
@@ -1351,7 +1351,7 @@ components:
       properties:
         deviceId:
           type: string
-          description: ID único do dispositivo gerado pela plataforma.
+          description: ID não único do dispositivo gerado pela plataforma.
           example: 00000000-54b3-e7c7-0000-000046bffd97
         isRootedDevice:
           type: boolean
@@ -1370,7 +1370,7 @@ components:
           description: Indica por quanto tempo (em milissegundos) o dispositivo está ligado.
         osVersion:
           type: string
-          description: Versão do sistema operacional.
+          description: Versão do sistema operacional Windows.
         userTimeZoneOffset:
           type: string
           description: |
@@ -1429,7 +1429,7 @@ components:
           description: Indica se o dispositivo está em modo de desenvolvedor.
         isMockGPS:
           type: boolean
-          description: Indica se o dispositivo está usando um GPS falso.
+          description: Indica se o dispositivo está usando um GPS falso ou não.
         isEmulated:
           type: boolean
           description: Indica se o dispositivo é emulado ou real.
