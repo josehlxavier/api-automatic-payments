@@ -18,7 +18,7 @@ jobs:
         id: swagger_info
         run: |
           VERSION=$(grep 'version:' swagger.yaml | awk '{print $2}')
-          TITLE=$(awk '/^info:/ {found=1} found && /title:/ {print $2; exit}' swagger.yaml | xargs)
+          TITLE=$(awk '/^info:/ {found=1} found && /title:/ {sub(/title: /, ""); print; exit}' swagger.yaml | xargs)
           echo "Swagger version: $VERSION"
           echo "Swagger title: $TITLE"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
