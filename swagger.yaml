@@ -184,7 +184,7 @@ info:
     Não é permitido ao usuário pagador o cancelamento de uma nova tentativa de pagamento, realizada pelo recebedor, quando autorizado no consentimento (campo “/data/recurringConfiguration/automatic/isRetryAccepted” como “True”) pelo usuário pagador ou quando o Iniciador precisar enviar um novo endToEndId. 
     Aplica-se tanto para a tentativa intradia quanto para a tentativa em dias subsequentes. É permitido ao recebedor o cancelamento das novas tentativas em dias subsequentes. Aplicam-se as regras de cancelamento da tentativa original, conforme previsto na descrição do endpoint PATCH /pix/recurringPayments Pagamentos que são novas tentativas, intradia ou em dias subsequentes, podem ser identificados pela presença do campo “/data/originalRecurringPaymentId” no recurso. 
   
-  version: 2.0.0
+  version: 2.1.0
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
@@ -1753,7 +1753,9 @@ components:
     CreditorAccount:
       type: object
       description: |
-        Objeto que contém a identificação da conta de destino do beneficiário/recebedor.
+        Objeto que contém a identificação da conta de destino do beneficiário/recebedor.  
+        [Restrição]  
+        Caso o pagamento tenha sido criado utilizando versão 2.0.0 ou superior, o retorno desse objeto é obrigatório pela instituição detentora
       required:
         - ispb
         - number
@@ -1766,7 +1768,8 @@ components:
           pattern: '^[0-9]{8}$'
           example: '12345678'
           description: |
-            Deve ser preenchido com o ISPB (Identificador do Sistema de Pagamentos Brasileiros) do participante do SPI (Sistema de pagamentos instantâneos) somente com números.
+            Deve ser preenchido com o ISPB (Identificador do Sistema de Pagamentos Brasileiros)  
+            do participante do SPI (Sistema de pagamentos instantâneos) somente com números.
         issuer:
           type: string
           minLength: 1
@@ -2979,6 +2982,47 @@ components:
           maxLength: 19
           example: '100000.12'
           description: Valor máximo a ser transacionado por um ano, a partir da data definida no campo `/data/startDateTime`.
+    CreditorAccountPostPixPaymentsResponse:
+      type: object
+      description: |
+        Objeto que contém a identificação da conta de destino do beneficiário/recebedor.  
+      required:
+        - ispb
+        - number
+        - accountType
+      properties:
+        ispb:
+          type: string
+          minLength: 8
+          maxLength: 8
+          pattern: '^[0-9]{8}$'
+          example: '12345678'
+          description: |
+            Deve ser preenchido com o ISPB (Identificador do Sistema de Pagamentos Brasileiros)  
+            do participante do SPI (Sistema de pagamentos instantâneos) somente com números.
+        issuer:
+          type: string
+          minLength: 1
+          maxLength: 4
+          pattern: '^[0-9]{1,4}$'
+          example: '1774'
+          description: |
+            Código da Agência emissora da conta sem dígito. 
+            (Agência é a dependência destinada ao atendimento aos clientes, ao público em geral e aos associados de cooperativas de crédito, 
+            no exercício de atividades da instituição, não podendo ser móvel ou transitória).
+            
+            [Restrição] Preenchimento obrigatório para os seguintes tipos de conta: CACC (CONTA_DEPOSITO_A_VISTA) e SVGS (CONTA_POUPANCA).
+        number:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: '^[0-9]{1,20}$'
+          example: '1234567890'
+          description: |
+            Deve ser preenchido com o número da conta transacional do usuário recebedor, com dígito verificador (se este existir),
+            se houver valor alfanumérico, este deve ser convertido para 0.
+        accountType:
+          $ref: '#/components/schemas/EnumAccountTypePayments'
     Creditors:
       type: array
       minItems: 1
@@ -4241,7 +4285,7 @@ components:
           description: |
             Deve ser preenchido sempre que o usuário pagador inserir alguma informação adicional em um pagamento, a ser enviada ao recebedor.
         creditorAccount:
-          $ref: '#/components/schemas/CreditorAccount'
+          $ref: '#/components/schemas/CreditorAccountPostPixPaymentsResponse'
         debtorAccount:
             $ref: '#/components/schemas/DebtorAccount'
         cancellation:
@@ -4364,7 +4408,6 @@ components:
         - status
         - cnpjInitiator
         - payment
-        - creditorAccount
         - document
         - localInstrument
       properties:
@@ -4565,7 +4608,6 @@ components:
         - status
         - cnpjInitiator
         - payment
-        - creditorAccount
         - document
         - localInstrument
       properties:
