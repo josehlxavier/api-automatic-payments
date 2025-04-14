@@ -38,14 +38,17 @@ jobs:
               "title": "%s",
               "pr_number": "%s"
             }
-          }' "${{ github.repository }}" "${{ github.event.pull_request.base.ref }}" "$VERSION" "$TITLE" "${{ github.event.pull_request.number }}")
+          }' \
+          "${{ github.repository }}" \
+          "${{ github.event.pull_request.base.ref }}" \
+          "$VERSION" \
+          "$TITLE" \
+          "${{ github.event.pull_request.number }}")
 
-          echo "🚨 JSON gerado para envio:"
+          echo "🔍 JSON final a ser enviado:"
           echo "$JSON"
-          echo "$JSON" | jq . || echo "⚠️ jq não disponível ou JSON malformado"
 
-          echo "📡 Enviando para GitHub API..."
-          curl -i -X POST -H "Accept: application/vnd.github.v3+json" \
+          curl -X POST -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: Bearer ${{ secrets.REPO_ACCESS_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "$JSON" \
