@@ -25,9 +25,26 @@ jobs:
           echo "TITLE=$TITLE" >> $GITHUB_ENV
 
       - name: Trigger remote workflow
+        env:
+          VERSION: ${{ env.VERSION }}
+          TITLE: ${{ env.TITLE }}
         run: |
+          JSON=$(printf '{
+            "ref": "main",
+            "inputs": {
+              "repository": "%s",
+              "branch": "%s",
+              "version": "%s",
+              "title": "%s",
+              "pr_number": "%s"
+            }
+          }' "${{ github.repository }}" "${{ github.event.pull_request.base.ref }}" "$VERSION" "$TITLE" "${{ github.event.pull_request.number }}")
+
+          echo "JSON payload:"
+          echo "$JSON"
+
           curl -X POST -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ secrets.REPO_ACCESS_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d "{\"ref\": \"main\", \"inputs\": {\"repository\": \"${{ github.repository }}\", \"branch\": \"${{ github.event.pull_request.base.ref }}\", \"version\": \"$VERSION\", \"title\": \"$TITLE\", \"pr_number\": \"${{ github.event.pull_request.number }}\"}}" \
-          "https://api.github.com/repos/OpenBanking-Brasil/CI-CD-OFB/actions/workflows/tag-control.yml/dispatches"
+            -H "Authorization: Bearer ${{ secrets.REPO_ACCESS_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "$JSON" \
+            "https://api.github.com/repos/OpenBanking-Brasil/CI-CD-OFB/actions/workflows/tag-control.yml/dispatches"
