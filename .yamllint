@@ -1,0 +1,8 @@
+extends: default
+rules:
+  document-start: disable
+  line-length:
+    max: 650      # longest line is ~605 chars
+    level: warning
+  trailing-spaces:
+    level: warning
