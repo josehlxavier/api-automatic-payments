@@ -1306,12 +1306,16 @@ components:
             - MANU - Inserção manual de dados da conta transacional
             - DICT - Inserção manual de chave Pix
             - INIC - Indica que o recebedor (creditor) contratou o Iniciador de Pagamentos especificamente para realizar iniciações de pagamento em que o beneficiário é previamente conhecido
+            - AUTO - Indica o pagamento de uma recorrência de Pix automático, onde o consentimento foi previamente autorizado pelo pagador e o pagamento é realizado automaticamente pelo Iniciador de Pagamentos sob comando do recebedor.
 
-            [Restrição] Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration"), apenas o método MANU é permitido.
+            [Restrição]  
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar uma recorrência (valor do campo "/data/paymentReferente" diferente de "zero"), apenas o método AUTO é permitido, ou;
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar o pagamento inicial avulso (valor do campo "/data/paymentReferente" igual a "zero"), apenas o método MANU é permitido.
           enum:
             - MANU
             - DICT
             - INIC
+            - AUTO
           example: DICT
         proxy:
           type: string
@@ -4512,12 +4516,16 @@ components:
             - MANU - Inserção manual de dados da conta transacional
             - DICT - Inserção manual de chave Pix
             - INIC - Indica que o recebedor (creditor) contratou o Iniciador de Pagamentos especificamente para realizar iniciações de pagamento em que o beneficiário é previamente conhecido
+            - AUTO - Indica o pagamento de uma recorrência de Pix automático, onde o consentimento foi previamente autorizado pelo pagador e o pagamento é realizado automaticamente pelo Iniciador de Pagamentos sob comando do recebedor.
 
-            [Restrição] Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration"), apenas o método MANU é permitido.
+            [Restrição]  
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar uma recorrência (valor do campo "/data/paymentReferente" diferente de "zero"), apenas o método AUTO é permitido, ou;
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar o pagamento inicial avulso (valor do campo "/data/paymentReferente" igual a "zero"), apenas o método MANU é permitido.
           enum:
             - MANU
             - DICT
             - INIC
+            - AUTO
           example: DICT
         proxy:
           type: string
@@ -4766,12 +4774,16 @@ components:
             - MANU - Inserção manual de dados da conta transacional
             - DICT - Inserção manual de chave Pix
             - INIC - Indica que o recebedor (creditor) contratou o Iniciador de Pagamentos especificamente para realizar iniciações de pagamento em que o beneficiário é previamente conhecido
+            - AUTO - Indica o pagamento de uma recorrência de Pix automático, onde o consentimento foi previamente autorizado pelo pagador e o pagamento é realizado automaticamente pelo Iniciador de Pagamentos sob comando do recebedor.
 
-            [Restrição] Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration"), apenas o método MANU é permitido.
+            [Restrição]  
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar uma recorrência (valor do campo "/data/paymentReferente" diferente de "zero"), apenas o método AUTO é permitido, ou;
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar o pagamento inicial avulso (valor do campo "/data/paymentReferente" igual a "zero"), apenas o método MANU é permitido.
           enum:
             - MANU
             - DICT
             - INIC
+            - AUTO
           example: DICT
         originalRecurringPaymentId:
           $ref: '#/components/schemas/originalRecurringPaymentId'
@@ -4966,12 +4978,16 @@ components:
             - MANU - Inserção manual de dados da conta transacional
             - DICT - Inserção manual de chave Pix
             - INIC - Indica que o recebedor (creditor) contratou o Iniciador de Pagamentos especificamente para realizar iniciações de pagamento em que o beneficiário é previamente conhecido
+            - AUTO - Indica o pagamento de uma recorrência de Pix automático, onde o consentimento foi previamente autorizado pelo pagador e o pagamento é realizado automaticamente pelo Iniciador de Pagamentos sob comando do recebedor.
 
-            [Restrição] Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration"), apenas o método MANU é permitido.
+            [Restrição]  
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar uma recorrência (valor do campo "/data/paymentReferente" diferente de "zero"), apenas o método AUTO é permitido, ou;
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar o pagamento inicial avulso (valor do campo "/data/paymentReferente" igual a "zero"), apenas o método MANU é permitido.
           enum:
             - MANU
             - DICT
             - INIC
+            - AUTO
           example: DICT
         originalRecurringPaymentId:
           $ref: '#/components/schemas/originalRecurringPaymentId'
