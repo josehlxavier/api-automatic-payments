@@ -2855,7 +2855,7 @@ components:
               example: '2023-05-21'
     ContractDebtor:
       type: object
-      description: Informações sobre o cliente devedor do contrato.
+      description:  Informações sobre o cliente devedor do contrato. Pode possuir titularidade diferente do usuário pagador descrito nos objetos "/data/loggedUser" e "/data/businessEntity".
       required: 
         - name
         - document
