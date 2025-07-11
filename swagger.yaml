@@ -668,6 +668,22 @@ components:
       schema:
         $ref: '#/components/schemas/X-V'
   schemas:
+    TransactionIdentification:
+      type: string
+      pattern: ^[a-zA-Z0-9]{1,35}$
+      maxLength: 35
+      example: 'E00038166201907261559y6j6'
+      description: |
+        Trata-se de um identificador de transação que deve ser retransmitido intacto pelo PSP do pagador ao gerar a ordem de pagamento. 
+        Essa informação permitirá ao recebedor identificar e correlacionar a transferência, quando recebida, com a apresentação das instruções ao pagador. 
+        Os caracteres permitidos no contexto do Pix para o campo txid (EMV 62-05) são:Letras minúsculas, de 'a' a 'z' Letras maiúsculas, de 'A' a 'z' Dígitos decimais, de '0' a '9'.
+
+        [Restrição] Preenchimento condicional de acordo com o conteúdo do campo localInstument:  
+        - MANU - O campo transactionIdentification não deve ser preenchido;  
+        - DICT - O campo transactionIdentification não deve ser preenchido;  
+        - INIC - O campo transactionIdentification deve ser preenchido obrigatoriamente e deve conter até 25 caracteres alfanuméricos ([a-z|A-Z|0-9]);  
+        - AUTO – O campo transactionIdentification não deve ser preenchido.
+
     ResponseErrorCreateConsent:
       type: object
       required:
@@ -1304,12 +1320,16 @@ components:
             - MANU - Inserção manual de dados da conta transacional
             - DICT - Inserção manual de chave Pix
             - INIC - Indica que o recebedor (creditor) contratou o Iniciador de Pagamentos especificamente para realizar iniciações de pagamento em que o beneficiário é previamente conhecido
+            - AUTO - Indica o pagamento de uma recorrência de Pix automático, onde o consentimento foi previamente autorizado pelo pagador e o pagamento é realizado automaticamente pelo Iniciador de Pagamentos sob comando do recebedor.
 
-            [Restrição] Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration"), apenas o método MANU é permitido.
+            [Restrição]  
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar uma recorrência (valor do campo "/data/paymentReferente" diferente de "zero"), apenas o método AUTO é permitido, ou;
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar o pagamento inicial avulso (valor do campo "/data/paymentReferente" igual a "zero"), apenas o método MANU é permitido.
           enum:
             - MANU
             - DICT
             - INIC
+            - AUTO
           example: DICT
         proxy:
           type: string
@@ -1327,19 +1347,7 @@ components:
           pattern: '[\w\W\s]*'
           example: '11221131242'
         transactionIdentification:
-          type: string
-          pattern: ^[a-zA-Z0-9]{1,35}$
-          maxLength: 35
-          example: 'E00038166201907261559y6j6'
-          description: |
-            Trata-se de um identificador de transação que deve ser retransmitido intacto pelo PSP do pagador ao gerar a ordem de pagamento. 
-            Essa informação permitirá ao recebedor identificar e correlacionar a transferência, quando recebida, com a apresentação das instruções ao pagador. 
-            Os caracteres permitidos no contexto do Pix para o campo txid (EMV 62-05) são:Letras minúsculas, de 'a' a 'z' Letras maiúsculas, de 'A' a 'z' Dígitos decimais, de '0' a '9'.
-
-            [Restrição] Preenchimento condicional de acordo com o conteúdo do campo localInstument:
-            - MANU - O campo transactionIdentification não deve ser preenchido;
-            - DICT - O campo transactionIdentification não deve ser preenchido;
-            - INIC - O campo transactionIdentification deve ser preenchido obrigatoriamente e deve conter até 25 caracteres alfanuméricos ([a-z|A-Z|0-9]).
+          $ref: '#/components/schemas/TransactionIdentification'
         document:
           type: object
           description: Informações do documento identificador do recebedor da transação.
@@ -4298,20 +4306,7 @@ components:
             description: |
               Deve ser preenchido sempre que o usuário pagador inserir alguma informação adicional em um pagamento, a ser enviada ao recebedor.
           transactionIdentification:
-            type: string
-            pattern: ^[a-zA-Z0-9]{1,35}$
-            maxLength: 35
-            example: 'E00038166201907261559y6j6'
-            description: |
-              Trata-se de um identificador de transação que deve ser retransmitido intacto pelo PSP do pagador ao gerar a ordem de pagamento. 
-              Essa informação permitirá ao recebedor identificar e correlacionar a transferência, quando recebida, com a apresentação das instruções ao pagador. 
-              Os caracteres permitidos no contexto do Pix para o campo txid (EMV 62-05) são:Letras minúsculas, de 'a' a 'z' Letras maiúsculas, de 'A' a 'z' Dígitos decimais, de '0' a '9'.
-
-              [Restrição] Preenchimento condicional de acordo com o conteúdo do campo “localInstrument”:
-              
-              MANU - O campo transactionIdentification não deve ser preenchido;  
-              DICT - O campo transactionIdentification não deve ser preenchido;  
-              INIC - O campo transactionIdentification deve ser preenchido obrigatoriamente e deve conter até 25 caracteres alfanuméricos ([a-z|A-Z|0-9]).
+            $ref: '#/components/schemas/TransactionIdentification'
           document:
             type: object
             description: Informações do documento.
@@ -4504,12 +4499,16 @@ components:
             - MANU - Inserção manual de dados da conta transacional
             - DICT - Inserção manual de chave Pix
             - INIC - Indica que o recebedor (creditor) contratou o Iniciador de Pagamentos especificamente para realizar iniciações de pagamento em que o beneficiário é previamente conhecido
+            - AUTO - Indica o pagamento de uma recorrência de Pix automático, onde o consentimento foi previamente autorizado pelo pagador e o pagamento é realizado automaticamente pelo Iniciador de Pagamentos sob comando do recebedor.
 
-            [Restrição] Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration"), apenas o método MANU é permitido.
+            [Restrição]  
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar uma recorrência (valor do campo "/data/paymentReferente" diferente de "zero"), apenas o método AUTO é permitido, ou;
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar o pagamento inicial avulso (valor do campo "/data/paymentReferente" igual a "zero"), apenas o método MANU é permitido.
           enum:
             - MANU
             - DICT
             - INIC
+            - AUTO
           example: DICT
         proxy:
           type: string
@@ -4527,20 +4526,7 @@ components:
           pattern: '[\w\W\s]*'
           example: '11221131242'
         transactionIdentification:
-          type: string
-          pattern: ^[a-zA-Z0-9]{1,35}$
-          maxLength: 35
-          example: 'E00038166201907261559y6j6'
-          description: |
-            Trata-se de um identificador de transação que deve ser retransmitido intacto pelo PSP do pagador ao gerar a ordem de pagamento. 
-            Essa informação permitirá ao recebedor identificar e correlacionar a transferência, quando recebida, com a apresentação das instruções ao pagador. 
-            Os caracteres permitidos no contexto do Pix para o campo txid (EMV 62-05) são:Letras minúsculas, de 'a' a 'z' Letras maiúsculas, de 'A' a 'z' Dígitos decimais, de '0' a '9'.
-
-            [Restrição] Preenchimento condicional de acordo com o conteúdo do campo “localInstrument”:
-            
-            MANU - O campo transactionIdentification não deve ser preenchido;  
-            DICT - O campo transactionIdentification não deve ser preenchido;  
-            INIC - O campo transactionIdentification deve ser preenchido obrigatoriamente e deve conter até 25 caracteres alfanuméricos ([a-z|A-Z|0-9]).
+          $ref: '#/components/schemas/TransactionIdentification'
         document:
           type: object
           description: Informações do documento identificador do recebedor da transação.
@@ -4698,20 +4684,7 @@ components:
             
             [Restrição] Se CIBA ou FIDO, preenchimento obrigatório. Caso o campo não esteja presente no payload, subentende-se que o fluxo de autorização utilizado é o HYBRID_FLOW.
         transactionIdentification:
-          type: string
-          pattern: ^[a-zA-Z0-9]{1,35}$
-          maxLength: 35
-          example: 'E00038166201907261559y6j6'
-          description: |
-            Trata-se de um identificador de transação que deve ser retransmitido intacto pelo PSP do pagador ao gerar a ordem de pagamento. 
-            Essa informação permitirá ao recebedor identificar e correlacionar a transferência, quando recebida, com a apresentação das instruções ao pagador. 
-            Os caracteres permitidos no contexto do Pix para o campo txid (EMV 62-05) são:Letras minúsculas, de 'a' a 'z' Letras maiúsculas, de 'A' a 'z' Dígitos decimais, de '0' a '9'.
-
-            [Restrição] Preenchimento condicional de acordo com o conteúdo do campo “localInstrument”:
-            
-            MANU - O campo transactionIdentification não deve ser preenchido;  
-            DICT - O campo transactionIdentification não deve ser preenchido;  
-            INIC - O campo transactionIdentification deve ser preenchido obrigatoriamente e deve conter até 25 caracteres alfanuméricos ([a-z|A-Z|0-9]).
+          $ref: '#/components/schemas/TransactionIdentification'
         document:
           type: object
           description: Informações do documento identificador do recebedor da transação.
@@ -4758,12 +4731,16 @@ components:
             - MANU - Inserção manual de dados da conta transacional
             - DICT - Inserção manual de chave Pix
             - INIC - Indica que o recebedor (creditor) contratou o Iniciador de Pagamentos especificamente para realizar iniciações de pagamento em que o beneficiário é previamente conhecido
+            - AUTO - Indica o pagamento de uma recorrência de Pix automático, onde o consentimento foi previamente autorizado pelo pagador e o pagamento é realizado automaticamente pelo Iniciador de Pagamentos sob comando do recebedor.
 
-            [Restrição] Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration"), apenas o método MANU é permitido.
+            [Restrição]  
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar uma recorrência (valor do campo "/data/paymentReferente" diferente de "zero"), apenas o método AUTO é permitido, ou;
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar o pagamento inicial avulso (valor do campo "/data/paymentReferente" igual a "zero"), apenas o método MANU é permitido.
           enum:
             - MANU
             - DICT
             - INIC
+            - AUTO
           example: DICT
         originalRecurringPaymentId:
           $ref: '#/components/schemas/originalRecurringPaymentId'
@@ -4898,20 +4875,7 @@ components:
             
             [Restrição] Se CIBA ou FIDO, preenchimento obrigatório. Caso o campo não esteja presente no payload, subentende-se que o fluxo de autorização utilizado é o HYBRID_FLOW.
         transactionIdentification:
-          type: string
-          pattern: ^[a-zA-Z0-9]{1,35}$
-          maxLength: 35
-          example: 'E00038166201907261559y6j6'
-          description: |
-            Trata-se de um identificador de transação que deve ser retransmitido intacto pelo PSP do pagador ao gerar a ordem de pagamento. 
-            Essa informação permitirá ao recebedor identificar e correlacionar a transferência, quando recebida, com a apresentação das instruções ao pagador. 
-            Os caracteres permitidos no contexto do Pix para o campo txid (EMV 62-05) são:Letras minúsculas, de 'a' a 'z' Letras maiúsculas, de 'A' a 'z' Dígitos decimais, de '0' a '9'.
-
-            [Restrição] Preenchimento condicional de acordo com o conteúdo do campo “localInstrument”:
-            
-            MANU - O campo transactionIdentification não deve ser preenchido;  
-            DICT - O campo transactionIdentification não deve ser preenchido;  
-            INIC - O campo transactionIdentification deve ser preenchido obrigatoriamente e deve conter até 25 caracteres alfanuméricos ([a-z|A-Z|0-9]).
+          $ref: '#/components/schemas/TransactionIdentification'
         document:
           type: object
           description: Informações do documento identificador do recebedor da transação.
@@ -4958,12 +4922,16 @@ components:
             - MANU - Inserção manual de dados da conta transacional
             - DICT - Inserção manual de chave Pix
             - INIC - Indica que o recebedor (creditor) contratou o Iniciador de Pagamentos especificamente para realizar iniciações de pagamento em que o beneficiário é previamente conhecido
+            - AUTO - Indica o pagamento de uma recorrência de Pix automático, onde o consentimento foi previamente autorizado pelo pagador e o pagamento é realizado automaticamente pelo Iniciador de Pagamentos sob comando do recebedor.
 
-            [Restrição] Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration"), apenas o método MANU é permitido.
+            [Restrição]  
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar uma recorrência (valor do campo "/data/paymentReferente" diferente de "zero"), apenas o método AUTO é permitido, ou;
+            Caso consentimento associado a tentativa de pagamento seja para Pix automático (objeto “automatic” selecionado no oneOf do campo "/data/recurringConfiguration") e a referência do pagamento indicar o pagamento inicial avulso (valor do campo "/data/paymentReferente" igual a "zero"), apenas o método MANU é permitido.
           enum:
             - MANU
             - DICT
             - INIC
+            - AUTO
           example: DICT
         originalRecurringPaymentId:
           $ref: '#/components/schemas/originalRecurringPaymentId'
