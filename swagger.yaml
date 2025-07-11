@@ -164,19 +164,32 @@ info:
         - OwnerStatistics.Spi.FraudMarkers.OtherFrauds.d90
         - OwnerStatistics.Spi.FraudMarkers.UnknownFrauds.d90
 
-    ## Limites transacionais e crédito pré-aprovado para Transferências inteligentes
+    ## Cálculo de limites e janelas de tempo para Transferências Inteligentes e Pix Automático
+      - Transferencias Inteligentes:  
+        - Existem três tipos de limites para o produto Transferências inteligentes
+        - Crédito pré-aprovado (cheque especial): Caso o cliente possua o produto, poderá utilizá-lo durante as transações associadas ao produto Transferências inteligentes.
+        - Limite do Pix atrelado à conta do cliente: Limite de transações definido individualmente para cada conta do cliente, conforme regras de dias e horários do arranjo Pix.
+        - Limites do consentimento: Configurado ou não pelo cliente em momento de criação do consentimento, podendo ser dependente ou não de um período.
+      - O cálculo do limite periódico disponível ao cliente ocorre da seguinte maneira, considerando os cenários, exemplos e o horário de Brasília, conforme a norma internacional ISO 8601 para definição dos períodos:
+        - Limite Diário (Período P1D, Ex.: R$ 100,00): Este limite controla as transferências realizadas dentro de um único dia civil, considerando o período das 00:00h às 23:59h. Por exemplo, se um usuário transferir R$ 50,00 às 10:00h, ele ainda terá R$ 50,00 disponíveis para transferências até as 23:59h do mesmo dia;  
+        - Limite Semanal (Período P1W, Ex.: R$ 1.000,00): O limite semanal abrange o período de uma semana completa, começando às 00:00h da segunda-feira e terminando às 23:59h do domingo, conforme a definição da norma ISO 8601. Por exemplo, se um usuário transferir R$ 200,00 na terça-feira e R$ 500,00 na sexta-feira, ele ainda poderá transferir R$300,00 até o final do domingo. Uma transação realizada no domingo é contabilizada para a semana que se encerra naquele dia;  
+        - Limite Mensal (Período P1M , Ex.: R$ 10.000,00): Este limite mensal é calculado do primeiro ao último dia de cada mês do calendário. Por exemplo, em um mês, se o usuário transferir R$ 2.000,00 na primeira semana e R$ 3.000,00 na segunda semana, ele ainda terá R$ 5.000,00 disponíveis para transferências pelo restante do mês;  
+        - Limite Anual (Período P1Y , Ex.: R$ 50.000,00): O limite anual conta do primeiro dia de janeiro ao último dia de dezembro de cada ano calendário. Por exemplo, se um usuário transferir R$ 10.000,00 até março, mais R$ 15.000,00 até junho e mais R$ 20.000,00 até setembro, ele só poderá transferir outros R$ 5.000,00 até o final do ano.  
+        - Esses limites ajudam a gerenciar as transferências de fundos, garantindo que não excedam os montantes estabelecidos para cada período. Cada limite é independente e é recalculado conforme sua respectiva janela de tempo se reinicia. Todos os pagamentos com status diferente de RJCT ou CANC devem ser considerados para o cálculo dos limites do consentimento.
 
-    - Existem três tipos de limites para o produto Transferências inteligentes
-      - Crédito pré-aprovado (cheque especial): Caso o cliente possua o produto, poderá utilizá-lo durante as transações associadas ao produto Transferências inteligentes.
-      - Limite do Pix atrelado à conta do cliente: Limite de transações definido individualmente para cada conta do cliente, conforme regras de dias e horários do arranjo Pix.
-      - Limites do consentimento: Configurado ou não pelo cliente em momento de criação do consentimento, podendo ser dependente ou não de um período.
-    - O cálculo do limite periódico disponível ao cliente deve ocorrer da seguinte maneira, considerando os cenários, exemplos e o horário de Brasília:
-      - Limite Diário (Ex.: R$ 100,00): Este limite controla as transferências realizadas dentro de um único dia, considerando o período das 00:00h até as 23:59h. Por exemplo, se um usuário transferir R$ 50,00 às 10:00h, ele ainda terá R$ 50,00 disponíveis para transferências até a meia-noite do mesmo dia;
-      - Limite Semanal (Ex.: R$ 1.000,00): O limite semanal abrange o período de uma semana inteira, começando às 00:00h de domingo e terminando às 23:59h do sábado. Por exemplo, se um usuário transferir R$ 200,00 na terça-feira e R$ 500,00 na quinta-feira, ele ainda poderá transferir até R$ 300,00 até o final do sábado;
-      - Limite Mensal (Ex.: R$ 10.000,00): Este limite mensal é calculado do primeiro ao último dia de cada mês. Por exemplo, em um mês, se o usuário transferir R$ 2.000,00 na primeira semana e R$ 3.000,00 na segunda semana, ele ainda terá R$ 5.000,00 disponíveis para transferências pelo restante do mês;
-      - Limite Anual (Ex.: R$ 50.000,00): O limite anual conta do primeiro dia de janeiro ao último dia de dezembro. Por exemplo, se um usuário transferir R$ 10.000,00 até março, mais R$ 15.000,00 até junho e mais R$ 20.000,00 até setembro, ele só poderá transferir outros R$ 5.000,00 até o final do ano;
-      - Esses limites ajudam a gerenciar as transferências de fundos, garantindo que não excedam os montantes estabelecidos para cada período. Cada limite é independente e é recalculado conforme sua respectiva janela de tempo se reinicia. Todos os pagamentos com status diferente de RJCT ou CANC devem ser considerados para o cálculo dos limites do consentimento.
-    
+      - Pix Automático:  
+        - Existem três tipos de limites para o produto Pix Automático:  
+          - Crédito pré-aprovado (cheque especial): Caso o cliente possua o produto, poderá utilizá-lo durante as transações associadas ao produto Pix Automático.   
+          - Limite do Pix atrelado à conta do cliente: Limite de transações definido individualmente para cada conta do cliente, conforme regras de dias e horários do arranjo Pix.  
+          - Limites do consentimento: Configurado (ou não) pelo cliente no momento da criação do consentimento, sendo sempre sujeitos à periodicidade definida no consentimento. Consentimentos para pagamentos de valores fixos não são passíveis de limites configuráveis pelo usuário pagador, cabendo a esses consentimentos de valor fixo apenas os dois limites mencionados acima.  
+        - Calculo das janelas para a definição da referencia do pagamento  
+          - O campo “/data/paymentReference”, presente nos endpoints de pagamento recorrente, representa o ciclo ao qual esse pedido de pagamento se refere. Informações sobre seu preenchimento estão presentes nos endpoints de pagamentos.
+            - Semanal: A semana começa a contar a partir das 00:00h do dia informado no campo “/data/recurringConfiguration/automatic/referenceStartDate” e vai até o dia imediatamente anterior a esse mesmo dia no ciclo seguinte. Exemplo: O pagador concede autorização no dia 29 de junho e a data prevista para o início do ciclo, que consta no consentimento, é 23 de julho. O primeiro ciclo inicia-se em 23/07 e vai até 29/07; o segundo inicia-se em 30/07 e vai até 05/08, e assim por diante.  
+            - Mensal: Inicia-se às 00:00h do dia informado no campo “/data/recurringConfiguration/automatic/referenceStartDate” e vai até as 23:59h do dia imediatamente anterior a esse mesmo dia, no próximo ciclo. Exemplo: O pagador concede autorização no dia 29 de junho e a data prevista para o início do ciclo, que consta no consentimento, é 23 de julho. O ciclo inicia todo dia 23 e se encerra todo dia 22. Para este exemplo, o primeiro ciclo seria entre 23/07 e 22/08, o segundo entre 23/08 e 22/09, e assim por diante.  
+            - Trimestral: Conta a partir das 00:00h da data especificada no campo “/data/recurringConfiguration/automatic/referenceStartDate” e vai até as 23:59h do dia imediatamente anterior a esse mesmo dia, no próximo ciclo. Exemplo: O pagador concede autorização no dia 29 de junho e a data prevista para o início do ciclo, que consta no consentimento, é 23 de julho. O ciclo inicia-se todo dia 23 e se encerra todo dia 22. Para este exemplo, o primeiro ciclo ocorre entre 23/07 e vai até 22/10.  
+            - Semestral: Conta a partir das 00:00h da data especificada no campo “/data/recurringConfiguration/automatic/referenceStartDate” e vai até as 23:59h do dia imediatamente anterior a esse mesmo dia, no próximo ciclo. Exemplo: O pagador concede autorização no dia 29 de junho, e a data prevista para o início do ciclo, que consta no consentimento, é 23 de julho. O ciclo inicia-se todo dia 23 e se encerra todo dia 22. Para este exemplo, o primeiro ciclo ocorre entre 23/07 e vai até 22/01.  
+            - Anual: Conta a partir das 00:00h data especificada no campo “/data/recurringConfiguration/automatic/referenceStartDate” e vai até as 23:59h do dia imediatamente anterior a esse mesmo dia, no próximo ciclo. Exemplo: O pagador concede autorização no dia 29 de junho e a data prevista para o início do ciclo, que consta no consentimento, é 23 de julho. O ciclo inicia-se todo dia 23 e se encerra todo dia 22. Para este exemplo, o primeiro ciclo ocorre entre 23/07 e vai até 22/07.  
+      
     ## Sobre a quantidade de consentimentos que podem ser criados
     Não há limitações relacionadas a quantidade de consentimentos que podem ser criados entre uma mesma ITP, conta de débito e titularidade. Fica a cargo da instituição iniciadora solicitar, sempre que julgar necessário para atendimento do usuário, a criação de um novo consentimento.
     
@@ -669,7 +682,7 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/X-V'
-  schemas:
+  schemas:    
     ResponseErrorCreateConsent:
       type: object
       required:
@@ -1369,31 +1382,33 @@ components:
         originalRecurringPaymentId:
           $ref: '#/components/schemas/originalRecurringPaymentId'
         paymentReference:
-          type: string
-          maxLength: 10
-          description: |
-            [Restrição]
-            Campo de preenchimento obrigatório caso seja um pagamento de Pix automático, caso não respeitado, a instituição detentora deve retornar erro HTTP 422 com o código DETALHE_PAGAMENTO_INVALIDO.
-
-            - Primeiro pagamento: Se for o pagamento inicial especificado em “/data/firstPayment”, preencha o campo com a string fixa “zero”.
-            - Semanal: Preencha com W$numSemana-$ano, onde $numSemana representa o número da semana no ano. Exemplo: "W50-2024".
-            - Mensal: Use M$mês-$ano, onde $mês representa o mês com dois dígitos. Exemplo: "M09-2024".
-            - Trimestral: Utilize Q$trimestre-$ano, onde $trimestre indica o trimestre do ano (1 a 4).
-              - Janeiro a Março: Q1-$ano (ex.: "Q1-2024").
-              - Abril a Junho: Q2-$ano (ex.: "Q2-2024").
-              - Julho a Setembro: Q3-$ano (ex.: "Q3-2024").
-              - Outubro a Dezembro: Q4-$ano (ex.: "Q4-2024").
-            - Semestral: Utilize $semestre-$ano, onde $semestre indica o semestre do ano (1 para janeiro a junho e 2 para julho a dezembro).
-              - Janeiro a Junho: S1-$ano (ex.: "S1-2024").
-              - Julho a Dezembro: S2-$ano (ex.: "S2-2024").
-            - Anual: Use Y$ano, apenas com o ano. Exemplo: "Y2024".
-              - Exemplo de Formatos:
-                - Primeiro pagamento: "zero"
-                - Semanal: "W50-2024"
-                - Mensal: "M09-2024"
-                - Trimestral: "Q3-2024"
-                - Semestral: "S2-2024"
-                - Anual: "Y2024"
+          $ref: '#/components/schemas/PaymentReference'
+    PaymentReference:
+      type: string
+      example: '23-07-2025/P1W'
+      minLength: 4
+      maxLength: 14
+      pattern: '^zero$|^\d{2}-\d{2}-\d{4}\/P(1W|1M|3M|6M|1Y)$'
+      description: |
+        [Restrição]Campo de preenchimento obrigatório caso seja um pagamento de Pix automático e deve ser enviado para critérios de coleta de métricas do ecossistema. Caso essa regra não seja respeitada, a instituição detentora da conta deve retornar um erro HTTP 422 com o código DETALHE_PAGAMENTO_INVALIDO.  
+        - O preenchimento deve seguir a seguinte lógica:  
+          - Primeiro Pagamento: Caso se trate do pagamento inicial avulso, especificado no campo “/data/firstPayment”, o valor deste campo deve ser preenchido com a string fixa "zero".  
+          - Pagamentos Recorrentes (Subsequentes): Para todos os pagamentos recorrentes realizados após o pagamento inicial, o campo paymentReference deve ser preenchido com uma string de Intervalo ISO 8601 no formato ```<start>/<duration>```, que representa o ciclo exato ao qual o pagamento se refere.  
+            - O componente ```<start>``` deve indicar a data de início do ciclo específico ao qual o pagamento enviado se refere.  
+            - O componente ```<duration>``` deve corresponder ao código da periodicidade do consentimento (P1W para semanal, P1M para mensal, P3M para trimestral, P6M para semestral e P1Y para anual)  
+            - Exemplos:
+              - 1: Data de início do ciclo definido no consentimento: 23/07/25
+                - Periodicidade definida no consentimento: Semanal
+                - Preenchimento do paymentReference:
+                - Primeiro ciclo: 23-07-2025/P1W
+                - Segundo ciclo: 30-07-2025/P1W
+                - Terceiro ciclo: 06-07-2025/P1W
+              - 2: Data de início do ciclo definido no consentimento: 23/07/25
+                - Periodicidade definida no consentimento: Mensal
+                - Preenchimento do paymentReference:
+                - Primeiro ciclo: 23-07-2025/P1M
+                - Segundo ciclo: 23-08-2025/P1M
+                - Terceiro ciclo: 23-09-2025/P1M
     RiskSignalsPayments:
       type: object
       description: |
@@ -4344,31 +4359,7 @@ components:
           originalRecurringPaymentId:
             $ref: '#/components/schemas/originalRecurringPaymentId'
           paymentReference:
-            type: string
-            maxLength: 10
-            description: |
-              [Restrição]
-              Campo de preenchimento obrigatório caso seja um pagamento de Pix automático, caso não respeitado, a instituição detentora deve retornar erro HTTP 422 com o código DETALHE_PAGAMENTO_INVALIDO.
-
-              - Primeiro pagamento: Se for o pagamento inicial especificado em “/data/firstPayment”, preencha o campo com a string fixa “zero”.
-              - Semanal: Preencha com W$numSemana-$ano, onde $numSemana representa o número da semana no ano. Exemplo: "W50-2024".
-              - Mensal: Use M$mês-$ano, onde $mês representa o mês com dois dígitos. Exemplo: "M09-2024".
-              - Trimestral: Utilize Q$trimestre-$ano, onde $trimestre indica o trimestre do ano (1 a 4).
-                - Janeiro a Março: Q1-$ano (ex.: "Q1-2024").
-                - Abril a Junho: Q2-$ano (ex.: "Q2-2024").
-                - Julho a Setembro: Q3-$ano (ex.: "Q3-2024").
-                - Outubro a Dezembro: Q4-$ano (ex.: "Q4-2024").
-              - Semestral: Utilize $semestre-$ano, onde $semestre indica o semestre do ano (1 para janeiro a junho e 2 para julho a dezembro).
-                - Janeiro a Junho: S1-$ano (ex.: "S1-2024").
-                - Julho a Dezembro: S2-$ano (ex.: "S2-2024").
-              - Anual: Use Y$ano, apenas com o ano. Exemplo: "Y2024".
-                - Exemplo de Formatos:
-                  - Primeiro pagamento: "zero"
-                  - Semanal: "W50-2024"
-                  - Mensal: "M09-2024"
-                  - Trimestral: "Q3-2024"
-                  - Semestral: "S2-2024"
-                  - Anual: "Y2024"
+            $ref: '#/components/schemas/PaymentReference'
     ResponseRecurringRetryPaymentsPostData:
       type: object
       required:
@@ -4576,31 +4567,7 @@ components:
         originalRecurringPaymentId:
           $ref: '#/components/schemas/originalRecurringPaymentId'
         paymentReference:
-          type: string
-          maxLength: 10
-          description: |
-            [Restrição]
-            Campo de preenchimento obrigatório caso seja um pagamento de Pix automático, caso não respeitado, a instituição detentora deve retornar erro HTTP 422 com o código DETALHE_PAGAMENTO_INVALIDO.
-
-            - Primeiro pagamento: Se for o pagamento inicial especificado em “/data/firstPayment”, preencha o campo com a string fixa “zero”.
-            - Semanal: Preencha com W$numSemana-$ano, onde $numSemana representa o número da semana no ano. Exemplo: "W50-2024".
-            - Mensal: Use M$mês-$ano, onde $mês representa o mês com dois dígitos. Exemplo: "M09-2024".
-            - Trimestral: Utilize Q$trimestre-$ano, onde $trimestre indica o trimestre do ano (1 a 4).
-              - Janeiro a Março: Q1-$ano (ex.: "Q1-2024").
-              - Abril a Junho: Q2-$ano (ex.: "Q2-2024").
-              - Julho a Setembro: Q3-$ano (ex.: "Q3-2024").
-              - Outubro a Dezembro: Q4-$ano (ex.: "Q4-2024").
-            - Semestral: Utilize $semestre-$ano, onde $semestre indica o semestre do ano (1 para janeiro a junho e 2 para julho a dezembro).
-              - Janeiro a Junho: S1-$ano (ex.: "S1-2024").
-              - Julho a Dezembro: S2-$ano (ex.: "S2-2024").
-            - Anual: Use Y$ano, apenas com o ano. Exemplo: "Y2024".
-              - Exemplo de Formatos:
-                - Primeiro pagamento: "zero"
-                - Semanal: "W50-2024"
-                - Mensal: "M09-2024"
-                - Trimestral: "Q3-2024"
-                - Semestral: "S2-2024"
-                - Anual: "Y2024"
+          $ref: '#/components/schemas/PaymentReference'
     ResponseRecurringPaymentsDataRead:
       type: object
       required:
@@ -4776,31 +4743,7 @@ components:
         originalRecurringPaymentId:
           $ref: '#/components/schemas/originalRecurringPaymentId'
         paymentReference:
-          type: string
-          maxLength: 10
-          description: |
-            [Restrição]
-            Campo de preenchimento obrigatório caso seja um pagamento de Pix automático, caso não respeitado, a instituição detentora deve retornar erro HTTP 422 com o código DETALHE_PAGAMENTO_INVALIDO.
-
-            - Primeiro pagamento: Se for o pagamento inicial especificado em “/data/firstPayment”, preencha o campo com a string fixa “zero”.
-            - Semanal: Preencha com W$numSemana-$ano, onde $numSemana representa o número da semana no ano. Exemplo: "W50-2024".
-            - Mensal: Use M$mês-$ano, onde $mês representa o mês com dois dígitos. Exemplo: "M09-2024".
-            - Trimestral: Utilize Q$trimestre-$ano, onde $trimestre indica o trimestre do ano (1 a 4).
-              - Janeiro a Março: Q1-$ano (ex.: "Q1-2024").
-              - Abril a Junho: Q2-$ano (ex.: "Q2-2024").
-              - Julho a Setembro: Q3-$ano (ex.: "Q3-2024").
-              - Outubro a Dezembro: Q4-$ano (ex.: "Q4-2024").
-            - Semestral: Utilize $semestre-$ano, onde $semestre indica o semestre do ano (1 para janeiro a junho e 2 para julho a dezembro).
-              - Janeiro a Junho: S1-$ano (ex.: "S1-2024").
-              - Julho a Dezembro: S2-$ano (ex.: "S2-2024").
-            - Anual: Use Y$ano, apenas com o ano. Exemplo: "Y2024".
-              - Exemplo de Formatos:
-                - Primeiro pagamento: "zero"
-                - Semanal: "W50-2024"
-                - Mensal: "M09-2024"
-                - Trimestral: "Q3-2024"
-                - Semestral: "S2-2024"
-                - Anual: "Y2024"
+          $ref: '#/components/schemas/PaymentReference'
     ResponseRecurringPaymentsDataPatch:
       type: object
       required:
@@ -4976,31 +4919,7 @@ components:
         originalRecurringPaymentId:
           $ref: '#/components/schemas/originalRecurringPaymentId'
         paymentReference:
-          type: string
-          maxLength: 10
-          description: |
-            [Restrição]
-            Campo de preenchimento obrigatório caso seja um pagamento de Pix automático, caso não respeitado, a instituição detentora deve retornar erro HTTP 422 com o código DETALHE_PAGAMENTO_INVALIDO.
-
-            - Primeiro pagamento: Se for o pagamento inicial especificado em “/data/firstPayment”, preencha o campo com a string fixa “zero”.
-            - Semanal: Preencha com W$numSemana-$ano, onde $numSemana representa o número da semana no ano. Exemplo: "W50-2024".
-            - Mensal: Use M$mês-$ano, onde $mês representa o mês com dois dígitos. Exemplo: "M09-2024".
-            - Trimestral: Utilize Q$trimestre-$ano, onde $trimestre indica o trimestre do ano (1 a 4).
-              - Janeiro a Março: Q1-$ano (ex.: "Q1-2024").
-              - Abril a Junho: Q2-$ano (ex.: "Q2-2024").
-              - Julho a Setembro: Q3-$ano (ex.: "Q3-2024").
-              - Outubro a Dezembro: Q4-$ano (ex.: "Q4-2024").
-            - Semestral: Utilize $semestre-$ano, onde $semestre indica o semestre do ano (1 para janeiro a junho e 2 para julho a dezembro).
-              - Janeiro a Junho: S1-$ano (ex.: "S1-2024").
-              - Julho a Dezembro: S2-$ano (ex.: "S2-2024").
-            - Anual: Use Y$ano, apenas com o ano. Exemplo: "Y2024".
-              - Exemplo de Formatos:
-                - Primeiro pagamento: "zero"
-                - Semanal: "W50-2024"
-                - Mensal: "M09-2024"
-                - Trimestral: "Q3-2024"
-                - Semestral: "S2-2024"
-                - Anual: "Y2024"
+          $ref: '#/components/schemas/PaymentReference'
     XFapiInteractionId:
       type: string
       format: uuid
