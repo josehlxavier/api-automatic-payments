@@ -166,7 +166,6 @@ info:
       - Transferencias Inteligentes:  
         - Existem três tipos de limites para o produto Transferências inteligentes
         - Crédito pré-aprovado (cheque especial): Caso o cliente possua o produto, poderá utilizá-lo durante as transações associadas ao produto Transferências inteligentes.
-        - Limite do consentimento: Configurado (ou não) pelo cliente em momento de criação do consentimento, podendo ser dependente (ou não) de um período
         - Limites do consentimento: Configurado ou não pelo cliente em momento de criação do consentimento, podendo ser dependente ou não de um período.
       - O cálculo do limite periódico disponível ao cliente ocorre da seguinte maneira, considerando os cenários, exemplos e o horário de Brasília, conforme a norma internacional ISO 8601 para definição dos períodos:
         - Limite Diário (Período P1D, Ex.: R$ 100,00): Este limite controla as transferências realizadas dentro de um único dia civil, considerando o período das 00:00h às 23:59h. Por exemplo, se um usuário transferir R$ 50,00 às 10:00h, ele ainda terá R$ 50,00 disponíveis para transferências até as 23:59h do mesmo dia;  
