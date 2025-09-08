@@ -4467,8 +4467,6 @@ components:
           $ref: '#/components/schemas/CreditorAccountPostPixPaymentsResponse'
         debtorAccount:
             $ref: '#/components/schemas/DebtorAccount'
-        cancellation:
-          $ref: '#/components/schemas/PixPaymentCancellation'
         authorisationFlow:
           type: string
           enum:
