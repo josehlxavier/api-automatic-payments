@@ -194,7 +194,7 @@ info:
     Não é permitido ao usuário pagador o cancelamento de uma nova tentativa de pagamento, realizada pelo recebedor, quando autorizado no consentimento (campo “/data/recurringConfiguration/automatic/isRetryAccepted” como “True”) pelo usuário pagador ou quando o Iniciador precisar enviar um novo endToEndId. 
     Aplica-se tanto para a tentativa intradia quanto para a tentativa em dias subsequentes. É permitido ao recebedor o cancelamento das novas tentativas em dias subsequentes. Aplicam-se as regras de cancelamento da tentativa original, conforme previsto na descrição do endpoint PATCH /pix/recurringPayments Pagamentos que são novas tentativas, intradia ou em dias subsequentes, podem ser identificados pela presença do campo “/data/originalRecurringPaymentId” no recurso. 
   
-  version: 2.2.0-rc.1
+  version: 2.2.0-rc.2
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
@@ -933,7 +933,6 @@ components:
                   - ERRO_IDEMPOTENCIA
                   - LIMITE_VALOR_TOTAL_CONSENTIMENTO_EXCEDIDO
                   - LIMITE_VALOR_TRANSACAO_CONSENTIMENTO_EXCEDIDO
-                  - LIMITE_TENTATIVAS_EXCEDIDO
                   - FORA_PRAZO_PERMITIDO
                   - DETALHE_TENTATIVA_INVALIDO
                 example: SALDO_INSUFICIENTE
@@ -956,7 +955,6 @@ components:
                   - ERRO_IDEMPOTENCIA: Erro idempotência.
                   - LIMITE_VALOR_TOTAL_CONSENTIMENTO_EXCEDIDO: Limite total excedido
                   - LIMITE_VALOR_TRANSACAO_CONSENTIMENTO_EXCEDIDO: O valor da transação ultrapassar o limite de valor por transação.
-                  - LIMITE_TENTATIVAS_EXCEDIDO: O limite de tentativas para liquidação do pagamento permitidas pelo arranjo foi excedido.
                   - FORA_PRAZO_PERMITIDO: O horário ou período da requisição não permite o agendamento pelo detentor.
                   - DETALHE_TENTATIVA_INVALIDO: O parâmetro [nome_do(s)_campo(s)] inseridos para a nova tentativa de pagamento não condizem com o pagamento original que falhou e não são permitidos na nova tentativa de pagamento.
               title:
@@ -983,7 +981,6 @@ components:
                   - ERRO_IDEMPOTENCIA: Erro idempotência.
                   - LIMITE_VALOR_TOTAL_CONSENTIMENTO_EXCEDIDO: Limite total excedido
                   - LIMITE_VALOR_TRANSACAO_CONSENTIMENTO_EXCEDIDO: Limite de transação excedido.
-                  - LIMITE_TENTATIVAS_EXCEDIDO: Limite de tentativas excedido.
                   - FORA_PRAZO_PERMITIDO: Tentativa fora do prazo.
                   - DETALHE_TENTATIVA_INVALIDO: Nova tentativa inválida
               detail:
@@ -4539,8 +4536,6 @@ components:
                 - CNPJ
               example: 'CNPJ'
               description: Tipo do documento de identificação oficial do titular pessoa natural ou jurídica.
-        originalRecurringPaymentId:
-          $ref: '#/components/schemas/originalRecurringPaymentId'
         paymentReference:
           $ref: '#/components/schemas/PaymentReference'
     ResponseRecurringPaymentsDataRead:
