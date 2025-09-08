@@ -1381,8 +1381,6 @@ components:
                 - CNPJ
               example: 'CNPJ'
               description: Tipo do documento de identificação oficial do titular pessoa natural ou jurídica.
-        originalRecurringPaymentId:
-          $ref: '#/components/schemas/originalRecurringPaymentId'
         paymentReference:
           $ref: '#/components/schemas/PaymentReference'
     PaymentReference:
