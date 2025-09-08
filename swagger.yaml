@@ -3858,8 +3858,6 @@ components:
                       example: O usuário rejeitou a autorização do consentimento 
             recurringConfiguration:
               $ref: '#/components/schemas/RecurringConfiguration'
-            riskSignals:
-              $ref: '#/components/schemas/RiskSignalsConsents'
             authorisedAtDateTime:
               type: string
               format: date-time
@@ -4121,8 +4119,6 @@ components:
                       example: O usuário rejeitou a autorização do consentimento 
             recurringConfiguration:
               $ref: '#/components/schemas/RecurringConfiguration'
-            riskSignals:
-              $ref: '#/components/schemas/RiskSignalsConsents'
             authorisedAtDateTime:
               type: string
               format: date-time
