@@ -1389,10 +1389,10 @@ components:
         [Restrição] Campo de preenchimento obrigatório caso seja um pagamento de Pix automático e deve ser enviado para critérios de coleta de métricas do ecossistema. Caso essa regra não seja respeitada, a instituição detentora da conta deve retornar um erro HTTP 422 com o código DETALHE_PAGAMENTO_INVALIDO.  
         O preenchimento deve seguir a seguinte lógica:  
         - Primeiro Pagamento: Se for o pagamento inicial especificado no campo /data/firstPayment, preencha o campo com a string fixa "zero".  
-        - Pagamentos Recorrentes (Subsequentes): Para todos os pagamentos recorrentes após o inicial, o campo paymentReference deve ser preenchido com uma string ISO 8601 no formato “R/<start>/<duration>”, representando o ciclo exato que está sendo pago.  
-          - “R”, seguindo o padrão ISO8601 para representar a recorrência única do ciclo que se iniciou no dia informado no componente “<start>”.  
-          - O componente “<start>” deve ser a data de início do ciclo específico, no formato “YYYY-MM-DD”, ao qual o pagamento sendo enviado se refere.    
-          - O componente “<duration>” representa o intervalo de ciclos definido para o consentimento autorizado (P1W para semanal, P1M para mensal, P3M para trimestral, P6M para semestral e P1Y para anual).   
+        - Pagamentos Recorrentes (Subsequentes): Para todos os pagamentos recorrentes após o inicial, o campo paymentReference deve ser preenchido com uma string ISO 8601 no formato ```R/<start>/<duration>```, representando o ciclo exato que está sendo pago.  
+          - ```R```, seguindo o padrão ISO8601 para representar a recorrência única do ciclo que se iniciou no dia informado no componente ```<start>```.  
+          - O componente ```<start>``` deve ser a data de início do ciclo específico, no formato ```YYYY-MM-DD```, ao qual o pagamento sendo enviado se refere.    
+          - O componente ```<duration>``` representa o intervalo de ciclos definido para o consentimento autorizado (P1W para semanal, P1M para mensal, P3M para trimestral, P6M para semestral e P1Y para anual).   
             - Exemplos:
               - 1: Data de início do ciclo definido no consentimento: 23/07/25
                 - Periodicidade definida no consentimento: Semanal
