@@ -2442,7 +2442,7 @@ components:
             properties:
               name:
                 type: string
-                pattern: ^([A-Za-zÀ-ÖØ-öø-ÿ,.@:&*+_<>()!?/\\$%\d' -]+)$
+                pattern: '^[\u0020-\u007E\u00A1-\u00FF]+$'
                 maxLength: 120
                 example: Marco Antonio de Brito
                 description: |
